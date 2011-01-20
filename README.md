@@ -1,0 +1,38 @@
+# phm - Y.A. Redis modeling library
+
+A weekend project, this library intends to explicitly abuse (little
+bit) macros to create a DSLy feeling when working with Redis
+(presumable mostly with webapps).
+
+## Usage
+
+Please read the tests for usage info. But basically you do:
+
+(defredismodel "user" {:attributes ["name] :collections ["friends"])
+
+Then you generate an occurrence out of this atom:
+
+(create-model-atom "user" "federico")
+
+This creates a var with root binding to user-federico. A big TODO now
+is create a ns for these bindings.
+
+You can use this var to create redis keys about the attributes:
+
+(create-redis-key user-federico {:name "Federico"})
+This saves a key "user:federico:name" with value "Federico"
+
+And also you can call this macro (generate-helper-funcs "user"
+"federico" user-federico)
+
+This will create some helper fns like:
+
+(user-federico-add "friends" "bernardo")
+It adds Bernardo to an in-memory representation of friends and also
+stores in the set "user:federico:friends" the value Bernardo in Redis.
+
+## License
+
+Copyright (C) 2010 Federico Brubacher
+
+Distributed under the Eclipse Public License, the same as Clojure.
